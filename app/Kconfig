@@ -2,30 +2,14 @@ menuconfig LED_SUBSYSTEM
 	bool "LED Subsystem"
 	default y
 	help
-	  Enable the GPIO2 LED blink application.
+	  Enable the heartbeat LED application.
 
 if LED_SUBSYSTEM
 
-choice LED_BLINK_SPEED
-	prompt "LED blink sleep time"
-	default LED_BLINK_MEDIUM
-
-config LED_BLINK_FAST
-	bool "0.5s (fast)"
-
-config LED_BLINK_MEDIUM
-	bool "1s (medium)"
-
-config LED_BLINK_SLOW
-	bool "2s (slow)"
-
-endchoice
-
-config LED_BLINK_SLEEP_MS
-	int
-	default 500 if LED_BLINK_FAST
-	default 1000 if LED_BLINK_MEDIUM
-	default 2000 if LED_BLINK_SLOW
+config APP_HEARTBEAT_PERIOD_MS
+	int "Heartbeat LED period (ms)"
+	range 100 2000
+	default 500
 
 menuconfig LED_ADVANCED
 	bool "Advanced LED settings"
