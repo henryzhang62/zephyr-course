@@ -4,7 +4,6 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/sys/printk.h>
 
-#define SLEEP_TIME_MS 1000
 #define LED_PIN 2
 
 static const struct device *const gpio = DEVICE_DT_GET(DT_NODELABEL(gpio0));
@@ -13,6 +12,8 @@ LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 int main(void)
 {
+    if (!IS_ENABLED(CONFIG_LED_SUBSYSTEM)) return 0;
+
     bool led_state = false;
     int ret;
 
@@ -36,7 +37,7 @@ int main(void)
 
         led_state = !led_state;
         LOG_INF("LED state: %s", led_state ? "ON" : "OFF");
-        k_msleep(SLEEP_TIME_MS);
+        k_msleep(CONFIG_LED_BLINK_SLEEP_MS);
     }
     return 0;
 }

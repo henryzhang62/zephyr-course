@@ -1,0 +1,59 @@
+menuconfig LED_SUBSYSTEM
+	bool "LED Subsystem"
+	default y
+	help
+	  Enable the GPIO2 LED blink application.
+
+if LED_SUBSYSTEM
+
+choice LED_BLINK_SPEED
+	prompt "LED blink sleep time"
+	default LED_BLINK_MEDIUM
+
+config LED_BLINK_FAST
+	bool "0.5s (fast)"
+
+config LED_BLINK_MEDIUM
+	bool "1s (medium)"
+
+config LED_BLINK_SLOW
+	bool "2s (slow)"
+
+endchoice
+
+config LED_BLINK_SLEEP_MS
+	int
+	default 500 if LED_BLINK_FAST
+	default 1000 if LED_BLINK_MEDIUM
+	default 2000 if LED_BLINK_SLOW
+
+menuconfig LED_ADVANCED
+	bool "Advanced LED settings"
+	default n
+
+if LED_ADVANCED
+
+config LED_BRIGHTNESS
+	int "LED brightness (0-100)"
+	range 0 100
+	default 100
+
+config LED_FADE_DURATION_MS
+	int "LED fade duration (ms)"
+	range 0 60000
+	default 500
+
+menu "Expert settings"
+
+config LED_DEBUG
+	bool "Enable LED debugging"
+	default n
+config LED_CUSTOM_BLINK_PATTERN
+	bool "Custom blink pattern"
+	default n
+endmenu
+
+endif # LED_ADVANCED
+endif # LED_SUBSYSTEM
+
+source "Kconfig.zephyr"
