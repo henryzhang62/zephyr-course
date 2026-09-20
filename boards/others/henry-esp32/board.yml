@@ -1,0 +1,6 @@
+board:
+  name: henry-esp32
+  full_name: Henry ESP32
+  vendor: others
+  socs:
+  - name: esp32
