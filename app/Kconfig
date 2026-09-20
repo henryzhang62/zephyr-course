@@ -40,4 +40,6 @@ endmenu
 endif # LED_ADVANCED
 endif # LED_SUBSYSTEM
 
+rsource "drivers/sensor/led_sensor/Kconfig"
+
 source "Kconfig.zephyr"
