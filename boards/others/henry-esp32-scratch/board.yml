@@ -1,0 +1,6 @@
+board:
+  name: henry-esp32-scratch
+  full_name: Henry ESP32 (from scratch)
+  vendor: others
+  socs:
+    - name: esp32

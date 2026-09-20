@@ -1,0 +1,42 @@
+/dts-v1/;
+
+#include <espressif/esp32/esp32.dtsi>
+#include <espressif/partitions_0x1000_amp.dtsi>
+#include <zephyr/dt-bindings/pinctrl/esp32-pinctrl.h>
+
+/ {
+	model = "Henry ESP32 (from scratch)";
+	compatible = "henry,esp32-scratch";
+
+	chosen {
+		zephyr,sram = &sram1;
+		zephyr,console = &uart0;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &slot0_partition;
+	};
+};
+
+&pinctrl {
+	uart0_default: uart0_default {
+		group1 {
+			pinmux = <UART0_TX_GPIO1>;
+			output-high;
+		};
+		group2 {
+			pinmux = <UART0_RX_GPIO3>;
+			bias-pull-up;
+		};
+	};
+};
+
+&uart0 {
+	status = "okay";
+	current-speed = <115200>;
+	pinctrl-0 = <&uart0_default>;
+	pinctrl-names = "default";
+};
+
+&flash0 {
+	reg = <0x0 DT_SIZE_M(4)>;
+	ranges = <0x0 0x0 DT_SIZE_M(4)>;
+};
