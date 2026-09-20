@@ -1,26 +1,38 @@
+#include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/sys/printk.h>
 
 #define SLEEP_TIME_MS 1000
+#define LED_PIN 2
 
-/* The devicetree node identifier for the "led0" alias. */
-#define LED_NODE DT_ALIAS(led0)
-
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED_NODE, gpios);
+static const struct device *const gpio = DEVICE_DT_GET(DT_NODELABEL(gpio0));
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 int main(void)
 {
-    bool led_state = true;
+    bool led_state = false;
+    int ret;
 
-    if (!gpio_is_ready_dt(&led)) return 0;
+    if (!device_is_ready(gpio)) {
+        printk("GPIO controller is not ready\n");
+        return 0;
+    }
 
-    if (gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE) < 0) return 0;
+    ret = gpio_pin_configure(gpio, LED_PIN, GPIO_OUTPUT_INACTIVE);
+    if (ret < 0) {
+        printk("GPIO2 configuration failed: %d\n", ret);
+        return 0;
+    }
 
     while (1) {
-        if (gpio_pin_toggle_dt(&led) < 0) return 0;
+        ret = gpio_pin_toggle(gpio, LED_PIN);
+        if (ret < 0) {
+            printk("GPIO2 toggle failed: %d\n", ret);
+            return 0;
+        }
 
         led_state = !led_state;
         LOG_INF("LED state: %s", led_state ? "ON" : "OFF");
