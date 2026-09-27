@@ -6,4 +6,7 @@ project(my_zephyr_app)
 
 add_subdirectory(drivers/sensor/led_sensor)
 target_include_directories(app PRIVATE drivers/sensor/led_sensor)
-target_sources(app PRIVATE src/main.c)
+target_sources(app PRIVATE
+  src/main.c
+  src/sensor_shell.c
+)
